@@ -1,6 +1,7 @@
 const { ipcRenderer } = require("electron")
 
 let dragging = null
+let contextTarget = null
 
 // create sticker
 function createSticker(src, x = 100, y = 100, scale = 1) {
@@ -32,6 +33,47 @@ function saveStickers() {
   })
 
   ipcRenderer.send("save-stickers", data)
+}
+
+// context menu
+function showContextMenu(x, y) {
+  removeContextMenu()
+
+  const menu = document.createElement("div")
+  menu.className = "context-menu"
+  menu.style.left = `${x}px`
+  menu.style.top = `${y}px`
+
+  menu.innerHTML = `
+    <div id="duplicate">Duplicate</div>
+    <div id="delete">Delete</div>
+  `
+
+  document.body.appendChild(menu)
+
+  menu.querySelector("#delete").onclick = () => {
+    contextTarget.remove()
+    saveStickers()
+    removeContextMenu()
+  }
+
+  menu.querySelector("#duplicate").onclick = () => {
+    const img = contextTarget.querySelector("img")
+    createSticker(
+      img.src,
+      contextTarget.offsetLeft + 20,
+      contextTarget.offsetTop + 20,
+      Number(contextTarget.dataset.scale)
+    )
+    saveStickers()
+    removeContextMenu()
+  }
+
+  document.addEventListener("click", removeContextMenu, { once: true })
+}
+
+function removeContextMenu() {
+  document.querySelector(".context-menu")?.remove()
 }
 
 
@@ -109,6 +151,18 @@ document.addEventListener("wheel", e => {
 
   saveStickers()
 }, { passive: false })
+
+// add context menu
+document.addEventListener("contextmenu", e => {
+  const sticker = e.target.closest(".sticker")
+  if (!sticker) return
+
+  e.preventDefault()
+  contextTarget = sticker
+
+  showContextMenu(e.clientX, e.clientY)
+})
+
 
 // render previous stickers
 window.addEventListener("DOMContentLoaded", async () => {
