@@ -11,30 +11,38 @@ const STICKER_DIR = path.join(app.getPath("userData"), "stickers")
 
 // app window
 function createWindow() {
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize
-  win.setBounds({ x: 0, y: 0, width, height })
-  win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    width,
-    height,
-    transparent:true,
-    frame: true,
-    alwaysOnTop: true,
-    resizable:true,
-    hasShadow:false,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation:false
-    }
-  })
+  const displays = screen.getAllDisplays()
+  windows = displays.map(d => {
+    const { x, y, width, height } = d.workArea
+    win = new BrowserWindow({
+      x,
+      y,
+      width,
+      height,
+      transparent:true,
+      frame: false,
+      alwaysOnTop: true,
+      resizable:true,
+      hasShadow:false,
+      webPreferences: {
+        nodeIntegration: true,
+        contextIsolation:false
+      }
+    })
 
-  win.loadFile("index.html")
+    win.displayId = d.id
+
+    win.loadFile("index.html")
+    return win
+  });
+
 
   // shortcut for click through
   globalShortcut.register("CommandOrControl+Shift+L", () => {
     clickThrough = !clickThrough
-    win.setIgnoreMouseEvents(clickThrough, { forward: true })
+    windows.forEach(w =>
+      w.setIgnoreMouseEvents(clickThrough, { forward: true })
+    )
   })
 }
 
