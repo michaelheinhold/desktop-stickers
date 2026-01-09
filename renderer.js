@@ -93,3 +93,11 @@ document.addEventListener("keydown", e => {
     ipcRenderer.send("toggle-click-through")
   }
 })
+
+// render previous stickers
+window.addEventListener("DOMContentLoaded", async () => {
+  const stickers = await ipcRenderer.invoke("load-stickers")
+  for (const s of stickers) {
+    createSticker(s.src, s.x, s.y, s.scale)
+  }
+})
