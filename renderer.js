@@ -11,8 +11,7 @@ function createSticker(src, x = 100, y = 100, scale = 1) {
   sticker.dataset.scale = scale
 
   const img = document.createElement("img")
-  //C:\\Users\\micha\\Pictures\\stickers\\
-  img.src = `${src}`
+  img.src = src
   img.style.transform = `scale(${scale})`
   img.draggable = false
 
@@ -93,6 +92,23 @@ document.addEventListener("keydown", e => {
     ipcRenderer.send("toggle-click-through")
   }
 })
+
+// change sticker size with mousewheel
+document.addEventListener("wheel", e => {
+  const sticker = e.target.closest(".sticker")
+  if (!sticker) return
+
+  e.preventDefault()
+
+  let scale = Number(sticker.dataset.scale || 1)
+  scale += e.deltaY * -0.001
+  scale = Math.min(Math.max(scale, 0.2), 3)
+
+  sticker.dataset.scale = scale
+  sticker.querySelector("img").style.transform = `scale(${scale})`
+
+  saveStickers()
+}, { passive: false })
 
 // render previous stickers
 window.addEventListener("DOMContentLoaded", async () => {
