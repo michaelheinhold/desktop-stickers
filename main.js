@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } = require("electron")
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, screen } = require("electron")
 const fs = require("fs")
 const path = require("path")
 
@@ -11,9 +11,13 @@ const STICKER_DIR = path.join(app.getPath("userData"), "stickers")
 
 // app window
 function createWindow() {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize
+  win.setBounds({ x: 0, y: 0, width, height })
   win = new BrowserWindow({
-    width:2560,
-    height:600,
+    x: 0,
+    y: 0,
+    width,
+    height,
     transparent:true,
     frame: true,
     alwaysOnTop: true,
