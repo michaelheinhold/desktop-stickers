@@ -3,13 +3,23 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "Place gifs, stickers, images on desktop",
   "devDependencies": {
-    "electron": "^39.2.7"
+    "electron": "^39.2.7",
+    "electron-builder": "^26.4.0"
+  },
+  "build": {
+    "appId": "com.derv.desktopstickers",
+    "productName": "Desktop Stickers",
+    "files": ["**/*"],
+    "directories": {
+      "buildResources": "assets"
+    }
   }
 }

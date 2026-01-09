@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron")
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } = require("electron")
 const fs = require("fs")
 const path = require("path")
 
@@ -26,6 +26,12 @@ function createWindow() {
   })
 
   win.loadFile("index.html")
+
+  // shortcut for click through
+  globalShortcut.register("CommandOrControl+Shift+L", () => {
+    clickThrough = !clickThrough
+    win.setIgnoreMouseEvents(clickThrough, { forward: true })
+  })
 }
 
 // toggle click through
@@ -58,4 +64,6 @@ ipcMain.handle("import-sticker", async (_, payload) => {
   return dest
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(()=>{
+  createWindow()
+})

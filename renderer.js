@@ -135,13 +135,6 @@ document.body.addEventListener("drop", async e => {
   saveStickers()
 })
 
-// click through event listner
-document.addEventListener("keydown", e => {
-  if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "l") {
-    ipcRenderer.send("toggle-click-through")
-  }
-})
-
 // change sticker size with mousewheel
 document.addEventListener("wheel", e => {
   const sticker = e.target.closest(".sticker")
