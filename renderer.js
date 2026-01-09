@@ -116,13 +116,20 @@ document.body.addEventListener("dragover", e => {
 })
 
 // drop file (add to canvas)
-document.body.addEventListener("drop", e => {
+document.body.addEventListener("drop", async e => {
   e.preventDefault()
 
   for (const file of e.dataTransfer.files) {
     if (!file.type.startsWith("image/")) continue
-    const url = URL.createObjectURL(file)
-    createSticker(url, e.clientX, e.clientY)
+
+    const buffer = await file.arrayBuffer()
+
+    const savedPath = await ipcRenderer.invoke("import-sticker", {
+      name: file.name,
+      buffer
+    })
+
+    createSticker(savedPath, e.clientX, e.clientY)
   }
 
   saveStickers()

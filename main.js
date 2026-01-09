@@ -7,6 +7,7 @@ let win
 let clickThrough = false
 
 const SAVE_PATH = path.join(app.getPath("userData"), "stickers.json")
+const STICKER_DIR = path.join(app.getPath("userData"), "stickers")
 
 // app window
 function createWindow() {
@@ -40,6 +41,21 @@ ipcMain.on("save-stickers", (_, data) => {
 ipcMain.handle("load-stickers", ()=> {
   if (!fs.existsSync(SAVE_PATH)) return []
   return JSON.parse(fs.readFileSync(SAVE_PATH))
+})
+
+ipcMain.handle("import-sticker", async (_, payload) => {
+  const { name, buffer } = payload
+
+  const ext = path.extname(name)
+  const filename = `${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2)}${ext}`
+
+  const dest = path.join(STICKER_DIR, filename)
+
+  fs.writeFileSync(dest, Buffer.from(buffer))
+
+  return dest
 })
 
 app.whenReady().then(createWindow)
