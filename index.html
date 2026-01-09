@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Desktop Stickers</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .sticker {
+      position: absolute;
+      left: 100px;
+      top: 100px;
+      cursor: grab;
+      user-select: none;
+    }
+
+    .sticker img {
+      pointer-events: none;
+      display: block;
+    }
+
+    .sticker:active {
+      cursor: grabbing;
+    }
+  </style>
+</head>
+<body>
+  <script src="renderer.js"></script>
+</body>
+</html>

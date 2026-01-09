@@ -1,0 +1,15 @@
+{
+  "name": "desktop-stickers",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Place gifs, stickers, images on desktop",
+  "devDependencies": {
+    "electron": "^39.2.7"
+  }
+}
